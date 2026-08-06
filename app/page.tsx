@@ -2,6 +2,8 @@ import Zookeeper from '@/public/images/zookeeper.png'
 import ScreenModel from '@/public/images/screen_model.png'
 import Image from 'next/image';
 import Logo from '@/public/images/full_logo.svg'
+import Apple from '@/public/images/apple.svg'
+import GooglePlay from '@/public/images/google_play.svg'
 import Link from 'next/link';
 
 export default function Home() {
@@ -11,7 +13,7 @@ export default function Home() {
 
       <div className='absolute top-0 h-screen w-screen'>
         <div className='w-[75%] mx-auto flex-col h-[92%]'>
-          <div className='flex flex-row justify-between items-center my-[30px]'>
+          <div className='flex flex-row justify-between items-center my-[30px] text-lg'>
             <Image src={Logo} alt='Logotipo' />
 
             <div className='font-sarabun font-semibold text-[#0F766E] gap-8 flex text-[18px]'>
@@ -25,20 +27,25 @@ export default function Home() {
             </div>
           </div>
 
-          <div className='w-[44%] mt-[162px] gap-8 flex flex-col'>
+          <div className='w-[40%] mt-[10%] gap-8 flex flex-col'>
             <div className='font-sarabun font-semibold gap-6 flex flex-col'>
               <p className='text-lg text-[#0F766E] rounded-lg px-[18.5] py-[16px] w-fit shadow-[0_1px_2px_0_rgb(0_180_169_/_0.06),0_1px_3px_0_rgb(0_180_169_/_0.10)] bg-[#FFFFFF]'>Inscreva-se para testar</p>
 
-              <p className='text-5xl font-semibold text-[#323B4B] leading-none text-[#323B4B]'>Plataforma inteligente para manejo de animais</p>
+              <p className='text-4xl font-semibold text-[#323B4B] leading-none text-[#323B4B]'>Plataforma inteligente para manejo de animais</p>
 
               <p className='text-justify text-lg leading-none text-[#323B4B]'>Centralize as informações da sua equipe, registre todas as atividades de manejo e tenha acesso às informações dos animais onde estiver. </p>
             </div>
 
-            <div className='font-circular font-semibold'>
-              <div>
-                <a href="" className='text-white py-2 px-4 bg-black rounded-lg'>Apple Store</a>
+            <div className='font-circular font-semibold flex flex-row gap-4 text-lg'>
+              <div className='py-2 px-4 bg-black w-fit justify-center flex gap-4 rounded-lg shadow-md'>
+                <Image src={Apple} alt='Logotipo da Apple Store' />
+                <a href="" className='text-white rounded-lg'>Apple Store</a>
               </div>
-              {/* <a href="" className='text-gray-600'>Google Play</a> */}
+
+              <div className='py-2 px-4 bg-white w-fit justify-center flex gap-4 rounded-lg shadow-md'>
+                <Image src={GooglePlay} alt='Logotipo do Google Play' />
+                <a href="" className='text-gray-600 rounded-lg'>Google Play</a>
+              </div>
             </div>
           </div>
         </div>
