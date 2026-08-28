@@ -1,11 +1,11 @@
 "use client";
 
-import { AnimatePresence, motion, useScroll } from "motion/react";
+import { motion, useScroll } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 const screens = [
   {
-    eyebrow: "01 · VISÃO GERAL",
+    eyebrow: "VISÃO GERAL",
     title: "Comece o dia com tudo sob controle.",
     description:
       "Na tela inicial, acompanhe os animais, os alertas e as tarefas prioritárias da sua equipe em uma só visão.",
@@ -13,7 +13,7 @@ const screens = [
     alt: "Tela inicial do aplicativo Espécies",
   },
   {
-    eyebrow: "02 · PERFIL DO ANIMAL",
+    eyebrow: "PERFIL DO ANIMAL",
     title: "As informações de cada animal, sempre à mão.",
     description:
       "Ao selecionar um animal, consulte o seu perfil completo com dados de identificação, saúde e informações relevantes para o manejo.",
@@ -21,7 +21,7 @@ const screens = [
     alt: "Tela de perfil de animal do aplicativo Espécies",
   },
   {
-    eyebrow: "03 · PROCEDIMENTOS",
+    eyebrow: "PROCEDIMENTOS",
     title: "Acompanhe o cuidado do início ao fim.",
     description:
       "Veja os procedimentos pendentes, o histórico de atendimentos e qual profissional realizou cada cuidado daquele animal.",
@@ -66,30 +66,35 @@ function PhonePreview({
   activeScreen: number;
   isMobile?: boolean;
 }) {
-  const screen = screens[activeScreen];
   return (
     <div
-      className={`relative z-10 rounded-[2.2rem] sm:rounded-[2.6rem] bg-[#202733] p-1.5 sm:p-2.5 shadow-[0_25px_60px_rgba(0,0,0,0.5)] transition-all ${
+      className={`relative z-10 rounded-[2.2rem] sm:rounded-[2.6rem] bg-[#202733] p-1.5 sm:p-2.5 shadow-[0_25px_60px_rgba(0,0,0,0.5)] ${
         isMobile
           ? "h-[min(73dvh,640px)] w-auto aspect-[430/932] max-w-[94vw]"
           : "w-[236px] sm:w-[280px]"
       }`}
     >
       <div className="relative h-full w-full aspect-[430/932] overflow-hidden rounded-[1.7rem] sm:rounded-[2rem] bg-white">
-        <AnimatePresence initial={false} mode="sync">
-          <motion.img
-            key={screen.image}
-            src={screen.image}
-            alt={screen.alt}
-            className="absolute inset-0 z-10 h-full w-full object-cover"
-            initial={{ opacity: 0, x: 24, scale: 1.02 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -24, scale: 0.98 }}
-            transition={{ duration: 0.38, ease: "easeOut" }}
-          />
-        </AnimatePresence>
+        {screens.map((screen, index) => {
+          const isActive = index === activeScreen;
+          return (
+            <img
+              key={screen.image}
+              src={screen.image}
+              alt={screen.alt}
+              loading="eager"
+              className={`absolute inset-0 z-10 h-full w-full object-cover transition-all duration-300 ease-out will-change-transform ${
+                isActive
+                  ? "opacity-100 translate-x-0 pointer-events-auto"
+                  : index < activeScreen
+                  ? "opacity-0 -translate-x-3 pointer-events-none"
+                  : "opacity-0 translate-x-3 pointer-events-none"
+              }`}
+            />
+          );
+        })}
       </div>
-      <div className="absolute left-1/2 top-2 sm:top-2.5 h-3 sm:h-3.5 w-16 sm:w-20 -translate-x-1/2 rounded-full bg-[#202733]" />
+      <div className="pointer-events-none absolute left-1/2 top-2 sm:top-2.5 h-3 sm:h-3.5 w-16 sm:w-20 -translate-x-1/2 rounded-full bg-[#202733]" />
     </div>
   );
 }
@@ -107,40 +112,55 @@ export default function FeatureShowcase() {
   });
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      if (window.innerWidth >= 1024) {
-        const viewportCenter = window.innerHeight / 2;
-        let closestIndex = 0;
-        let minDistance = Number.POSITIVE_INFINITY;
-        screenRefs.current.forEach((el, index) => {
-          if (!el) return;
-          const rect = el.getBoundingClientRect();
-          const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
-          if (distance < minDistance) {
-            minDistance = distance;
-            closestIndex = index;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.innerWidth >= 1024) {
+            const viewportCenter = window.innerHeight / 2;
+            let closestIndex = 0;
+            let minDistance = Number.POSITIVE_INFINITY;
+            screenRefs.current.forEach((el, index) => {
+              if (!el) return;
+              const rect = el.getBoundingClientRect();
+              const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+              if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = index;
+              }
+            });
+            setActiveScreen((prev) => (prev !== closestIndex ? closestIndex : prev));
+          } else {
+            if (!mobileTrackRef.current) {
+              ticking = false;
+              return;
+            }
+            const rect = mobileTrackRef.current.getBoundingClientRect();
+            const scrollableDistance = mobileTrackRef.current.offsetHeight - window.innerHeight;
+            if (scrollableDistance <= 0) {
+              ticking = false;
+              return;
+            }
+            const progress = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
+            let newIndex = 0;
+            if (progress < 0.33) {
+              newIndex = 0;
+            } else if (progress < 0.66) {
+              newIndex = 1;
+            } else {
+              newIndex = 2;
+            }
+            setActiveScreen((prev) => (prev !== newIndex ? newIndex : prev));
           }
+          ticking = false;
         });
-        setActiveScreen(closestIndex);
-      } else {
-        if (!mobileTrackRef.current) return;
-        const rect = mobileTrackRef.current.getBoundingClientRect();
-        const scrollableDistance = mobileTrackRef.current.offsetHeight - window.innerHeight;
-        if (scrollableDistance <= 0) return;
-        const progress = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
-        if (progress < 0.33) {
-          setActiveScreen(0);
-        } else if (progress < 0.66) {
-          setActiveScreen(1);
-        } else {
-          setActiveScreen(2);
-        }
+        ticking = true;
       }
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll);
+    window.addEventListener("resize", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleScroll);
@@ -202,43 +222,32 @@ export default function FeatureShowcase() {
             <PhonePreview activeScreen={activeScreen} isMobile />
           </div>
 
-          {/* Descrição da tela ativa e indicadores com espaçamento compacto */}
-          <div className="shrink-0 flex w-full max-w-sm flex-col items-center justify-center text-center">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeScreen}
-                initial={{ opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
-                className="flex flex-col items-center px-1"
-              >
-                <p className="font-sarabun text-[10px] sm:text-xs font-bold tracking-[0.12em] text-[#FFCD52]">
-                  {screens[activeScreen].eyebrow}
-                </p>
-                <h3 className="mt-0.5 font-sarabun text-sm sm:text-base font-semibold leading-snug text-white">
-                  {screens[activeScreen].title}
-                </h3>
-                <p className="mt-0.5 font-sarabun text-[11px] leading-relaxed text-[#d1e6df] sm:text-xs line-clamp-2">
-                  {screens[activeScreen].description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-
-            {/* Pontos indicadores de progresso */}
-            <div className="mt-1.5 flex items-center gap-1.5">
-              {screens.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => navigateToScreen(idx)}
-                  aria-label={`Ir para tela ${idx + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    idx === activeScreen ? "w-5 bg-[#FFCD52]" : "w-1.5 bg-white/30"
+          {/* Descrição da tela ativa com layout estável em grid */}
+          <div className="shrink-0 relative grid w-full max-w-sm grid-cols-1 grid-rows-1 items-center justify-items-center text-center px-2 min-h-[76px] sm:min-h-[84px]">
+            {screens.map((screen, idx) => {
+              const isActive = idx === activeScreen;
+              return (
+                <div
+                  key={screen.title}
+                  className={`col-start-1 row-start-1 flex flex-col items-center px-1 transition-all duration-300 ease-out ${
+                    isActive
+                      ? "opacity-100 translate-y-0 pointer-events-auto"
+                      : "opacity-0 translate-y-1 pointer-events-none"
                   }`}
-                />
-              ))}
-            </div>
+                  aria-hidden={!isActive}
+                >
+                  <p className="font-sarabun text-[10px] sm:text-xs font-bold tracking-[0.12em] text-[#FFCD52]">
+                    {screen.eyebrow}
+                  </p>
+                  <h3 className="mt-0.5 font-sarabun text-sm sm:text-base font-semibold leading-snug text-white">
+                    {screen.title}
+                  </h3>
+                  <p className="mt-0.5 font-sarabun text-[11px] leading-relaxed text-[#d1e6df] sm:text-xs line-clamp-2">
+                    {screen.description}
+                  </p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
