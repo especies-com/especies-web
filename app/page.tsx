@@ -43,7 +43,7 @@ export default function Home() {
       <FeatureShowcase />
       <footer id="preco" className="bg-[#FF8B3E] px-6 py-12 text-white sm:px-10 lg:px-16">
         <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:items-end md:justify-between">
-          <div><Image src={Logo} alt="Espécies" className="brightness-0 invert" /><p className="mt-5 max-w-md font-sarabun text-base leading-relaxed text-white/75">Tecnologia para aproximar pessoas, dados e o cuidado com cada animal.</p></div>
+          <div><Image src={Logo} alt="Espécies" className="brightness-0 invert" /><p className="mt-5 max-w-md font-sarabun text-base leading-relaxed text-white/75 lg:max-w-none lg:whitespace-nowrap">Tecnologia para aproximar pessoas, dados e o cuidado com cada animal.</p></div>
           <div className="flex flex-wrap gap-x-8 gap-y-3 font-sarabun font-semibold text-white/90"><a href="#sobre">Sobre a plataforma</a><Link href="/login">Entrar</Link><Link href="/signup">Inscreva-se</Link></div>
         </div>
         <div className="mx-auto mt-10 max-w-7xl border-t border-white/20 pt-6 font-sarabun text-sm text-white/60">© {new Date().getFullYear()} Espécies. Todos os direitos reservados.</div>
