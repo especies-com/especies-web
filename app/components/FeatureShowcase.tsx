@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "motion/react";
+import { AnimatePresence, motion, useScroll } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 const screens = [
@@ -95,58 +95,87 @@ function PhonePreview({
 }
 
 export default function FeatureShowcase() {
-  const showcaseRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const desktopTrackRef = useRef<HTMLDivElement>(null);
+  const mobileTrackRef = useRef<HTMLDivElement>(null);
+  const screenRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [activeScreen, setActiveScreen] = useState(0);
 
   const { scrollYProgress } = useScroll({
-    target: showcaseRef,
+    target: sectionRef,
     offset: ["start start", "end end"],
   });
 
-  useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    if (progress < 0.33) {
-      setActiveScreen(0);
-    } else if (progress < 0.66) {
-      setActiveScreen(1);
-    } else {
-      setActiveScreen(2);
-    }
-  });
-
   useEffect(() => {
-    const currentProgress = scrollYProgress.get();
-    if (currentProgress < 0.33) {
-      setActiveScreen(0);
-    } else if (currentProgress < 0.66) {
-      setActiveScreen(1);
-    } else {
-      setActiveScreen(2);
-    }
-  }, [scrollYProgress]);
+    const handleScroll = () => {
+      if (window.innerWidth >= 1024) {
+        const viewportCenter = window.innerHeight / 2;
+        let closestIndex = 0;
+        let minDistance = Number.POSITIVE_INFINITY;
+        screenRefs.current.forEach((el, index) => {
+          if (!el) return;
+          const rect = el.getBoundingClientRect();
+          const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
+        });
+        setActiveScreen(closestIndex);
+      } else {
+        if (!mobileTrackRef.current) return;
+        const rect = mobileTrackRef.current.getBoundingClientRect();
+        const scrollableDistance = mobileTrackRef.current.offsetHeight - window.innerHeight;
+        if (scrollableDistance <= 0) return;
+        const progress = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
+        if (progress < 0.33) {
+          setActiveScreen(0);
+        } else if (progress < 0.66) {
+          setActiveScreen(1);
+        } else {
+          setActiveScreen(2);
+        }
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
 
   const navigateToScreen = (index: number) => {
     setActiveScreen(index);
-    if (!showcaseRef.current) return;
-    const rect = showcaseRef.current.getBoundingClientRect();
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    const showcaseTop = rect.top + scrollTop;
-    const scrollableDistance = showcaseRef.current.offsetHeight - window.innerHeight;
+    if (window.innerWidth >= 1024) {
+      screenRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    } else if (mobileTrackRef.current) {
+      const rect = mobileTrackRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY || document.documentElement.scrollTop;
+      const trackTop = rect.top + scrollTop;
+      const scrollableDistance = mobileTrackRef.current.offsetHeight - window.innerHeight;
+      const targetOffset =
+        index === 0
+          ? 0
+          : index === 1
+          ? scrollableDistance * 0.5
+          : scrollableDistance;
 
-    const targetOffset =
-      index === 0
-        ? 0
-        : index === 1
-        ? scrollableDistance * 0.5
-        : scrollableDistance;
-
-    window.scrollTo({
-      top: showcaseTop + targetOffset,
-      behavior: "smooth",
-    });
+      window.scrollTo({
+        top: trackTop + targetOffset,
+        behavior: "smooth",
+      });
+    }
   };
 
   return (
-    <section id="sobre" className="overflow-x-clip bg-[#0b3b37] px-4 py-12 sm:px-10 lg:px-16 lg:py-0">
+    <section
+      id="sobre"
+      ref={sectionRef}
+      className="relative overflow-x-clip bg-[#0b3b37] px-4 py-12 sm:px-10 lg:px-16 lg:py-0"
+    >
       {/* Header informativo */}
       <div className="mx-auto max-w-6xl py-12 text-center lg:py-28">
         <p className="font-sarabun text-sm font-bold tracking-[0.16em] text-[#FFCD52]">
@@ -160,10 +189,9 @@ export default function FeatureShowcase() {
         </p>
       </div>
 
-      {/* Container interativo com scroll */}
-      <div ref={showcaseRef} className="relative h-[300vh] mx-auto max-w-6xl">
-        {/* MOBILE VIEW (< lg): Viewport travada/sticky, centralizada, telas com altura máxima */}
-        <div className="sticky top-0 flex h-dvh w-full flex-col items-center justify-center overflow-hidden px-3 py-1.5 sm:py-3 lg:hidden">
+      {/* MOBILE VIEW (< lg): Container com altura de scroll e sticky viewport */}
+      <div ref={mobileTrackRef} className="relative h-[250vh] lg:hidden">
+        <div className="sticky top-0 flex h-dvh w-full flex-col items-center justify-center overflow-hidden px-3 py-1.5 sm:py-3">
           {/* Abas no topo logo acima da tela */}
           <div className="w-full max-w-xs sm:max-w-sm shrink-0">
             <ScreenTabs activeScreen={activeScreen} onSelect={navigateToScreen} />
@@ -213,15 +241,24 @@ export default function FeatureShowcase() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* DESKTOP VIEW (>= lg): 2 Colunas */}
-        <div className="hidden lg:grid lg:items-start lg:grid-cols-2 lg:gap-20">
+      {/* DESKTOP VIEW (>= lg): Grid de 2 Colunas perfeitamente delimitado no final */}
+      <div ref={desktopTrackRef} className="hidden lg:block mx-auto max-w-6xl pb-16">
+        <div className="grid grid-cols-2 gap-20 items-start">
+          {/* Coluna Esquerda: Abas fixas e 3 seções de tela de altura 100vh */}
           <div className="relative">
             <div className="sticky top-6 z-30 mb-0 pt-6">
               <ScreenTabs activeScreen={activeScreen} onSelect={navigateToScreen} />
             </div>
-            {screens.map((screen) => (
-              <div key={screen.title} className="flex min-h-screen items-center">
+            {screens.map((screen, index) => (
+              <div
+                key={screen.title}
+                ref={(element) => {
+                  screenRefs.current[index] = element;
+                }}
+                className="flex h-screen items-center"
+              >
                 <article className="max-w-md">
                   <p className="font-sarabun text-sm font-bold tracking-[0.12em] text-[#FFCD52]">
                     {screen.eyebrow}
@@ -236,7 +273,9 @@ export default function FeatureShowcase() {
               </div>
             ))}
           </div>
-          <div className="sticky top-0 hidden h-screen self-start items-center justify-center lg:flex">
+
+          {/* Coluna Direita: Mockup sticky que destrava exatamente no final da 3ª tela */}
+          <div className="sticky top-0 flex h-screen items-center justify-center self-start">
             <div className="relative flex h-[min(78vh,720px)] w-full max-w-[560px] items-center justify-center overflow-hidden rounded-[3rem] bg-[#FF8B3E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]">
               <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-[#FFCD52]/35 blur-3xl" />
               <div className="absolute -left-20 top-1/4 h-56 w-56 rounded-full bg-white/15 blur-3xl" />

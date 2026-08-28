@@ -41,7 +41,7 @@ export default function Home() {
         <Image alt="Exemplo de tela do aplicativo" src={ScreenModel} className="pointer-events-none absolute bottom-[19%] right-[2%] hidden scale-75 lg:block" />
       </section>
       <FeatureShowcase />
-      <footer id="preco" className="bg-[#FF8B3E] px-6 py-12 text-white sm:px-10 lg:px-16">
+      <footer id="preco" className="relative z-10 bg-[#FF8B3E] px-6 py-12 text-white sm:px-10 lg:px-16">
         <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:items-end md:justify-between">
           <div><Image src={Logo} alt="Espécies" className="brightness-0 invert" /><p className="mt-5 max-w-md font-sarabun text-base leading-relaxed text-white/75 lg:max-w-none lg:whitespace-nowrap">Tecnologia para aproximar pessoas, dados e o cuidado com cada animal.</p></div>
           <div className="flex flex-wrap gap-x-8 gap-y-3 font-sarabun font-semibold text-white/90"><a href="#sobre">Sobre a plataforma</a><Link href="/login">Entrar</Link><Link href="/signup">Inscreva-se</Link></div>
