@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Zookeeper from "@/public/images/zookeeper.png";
 import ScreenModel from "@/public/images/screen_model.png";
+import Background from "@/public/images/background.png";
 import Logo from "@/public/images/full_logo.svg";
 import Apple from "@/public/images/apple.svg";
 import GooglePlay from "@/public/images/google_play.svg";
@@ -12,10 +13,17 @@ export default function Home() {
   return (
     <main className="overflow-x-clip">
       <section className="relative min-h-screen overflow-hidden bg-[#e7f4ed]">
-        <Image src="/images/background.svg" alt="" fill priority sizes="100vw" className="object-cover" />
+        <Image
+          src={Background}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
         <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col px-6 sm:px-10 lg:px-12">
           <header className="flex items-center justify-between py-6 text-lg sm:py-8">
-            <Image src={Logo} alt="Espécies" />
+            <Image src={Logo} alt="Espécies" priority />
             <nav className="hidden font-sarabun text-[18px] font-semibold text-[#0F766E] md:flex md:gap-8">
               <a href="#sobre">Sobre</a><a href="#preco">Preço</a>
             </nav>
@@ -37,8 +45,20 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <Image alt="Tratadora de animais" src={Zookeeper} className="pointer-events-none absolute bottom-0 right-[16%] hidden h-[78%] w-auto lg:block" />
-        <Image alt="Exemplo de tela do aplicativo" src={ScreenModel} className="pointer-events-none absolute bottom-[19%] right-[2%] hidden scale-75 lg:block" />
+        <Image
+          alt="Tratadora de animais"
+          src={Zookeeper}
+          priority
+          sizes="(min-width: 1024px) 50vw, 0vw"
+          className="pointer-events-none absolute bottom-0 right-[16%] hidden h-[78%] w-auto lg:block"
+        />
+        <Image
+          alt="Exemplo de tela do aplicativo"
+          src={ScreenModel}
+          priority
+          sizes="(min-width: 1024px) 30vw, 0vw"
+          className="pointer-events-none absolute bottom-[19%] right-[2%] hidden scale-75 lg:block"
+        />
       </section>
       <FeatureShowcase />
       <footer id="preco" className="relative z-10 bg-[#FF8B3E] px-6 py-12 text-white sm:px-10 lg:px-16">
