@@ -2,26 +2,37 @@
 
 import * as amplitude from '@amplitude/unified';
 
-const API_KEY = process.env.NEXT_PUBLIC_AMPLITUDE_API_KEY;
 let isInitialized = false;
 
 export async function initializeAmplitude() {
   if (isInitialized) return;
-  if (!API_KEY) {
-    console.warn('Amplitude API key missing — analytics disabled');
-    return;
-  }
 
-  amplitude.initAll(API_KEY, {
-    analytics: {
-      autocapture: true,
-    },
-    sessionReplay: {
-      sampleRate: 1,
-    },
-  });
-  
-  isInitialized = true;
+  try {
+    const response = await fetch('/api/config/amplitude');
+    if (!response.ok) {
+      console.warn('Amplitude API key missing — analytics disabled');
+      return;
+    }
+
+    const { apiKey } = await response.json();
+    if (!apiKey) {
+      console.warn('Amplitude API key missing — analytics disabled');
+      return;
+    }
+
+    amplitude.initAll(apiKey, {
+      analytics: {
+        autocapture: true,
+      },
+      sessionReplay: {
+        sampleRate: 1,
+      },
+    });
+
+    isInitialized = true;
+  } catch (error) {
+    console.warn('Failed to initialize Amplitude:', error);
+  }
 }
 
 export default amplitude;
