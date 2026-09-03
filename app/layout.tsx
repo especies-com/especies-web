@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AmplitudeProvider } from "./components/AmplitudeProvider";
 
 export const metadata: Metadata = {
   title: "Manejo Inteligente de Animais | especies",
@@ -12,7 +13,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AmplitudeProvider>{children}</AmplitudeProvider>
+      </body>
     </html>
   );
 }
