@@ -59,9 +59,6 @@ export default function ResearchSections() {
               alt="Tratadora consultando informações no celular"
               className="keeper"
             />
-            <div className="image-label">
-              <span className="status-dot" /> TECNOLOGIA A SERVIÇO DO CUIDADO
-            </div>
           </div>
           <div className="program-text">
             <p className="eyebrow">CONSTRUIR JUNTOS FAZ MAIS SENTIDO</p>

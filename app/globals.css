@@ -477,7 +477,23 @@ h2 {
 .showcase {
   background: #103e39;
   color: #f8fcf7;
-  overflow: hidden;
+  overflow: clip;
+}
+.showcase-track {
+  position: relative;
+  margin-top: 44px;
+  height: calc(var(--preview-height, 700px) + 280svh);
+}
+.showcase-sticky {
+  position: sticky;
+  top: var(--preview-top, 24px);
+  display: flow-root;
+}
+.showcase-sticky .profile-tabs {
+  margin-top: 0;
+}
+.showcase-sticky .showcase-grid {
+  min-height: 560px;
 }
 .showcase-heading {
   text-align: center;

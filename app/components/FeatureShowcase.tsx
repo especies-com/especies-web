@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 
 
@@ -220,6 +220,58 @@ export function HeroPreview() {
 export default function FeatureShowcase() {
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
+  const trackRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    const panel = panelRef.current;
+    if (!track || !panel) return;
+    let frame = 0;
+
+    const update = () => {
+      frame = 0;
+      const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
+      const distance = track.offsetHeight - panel.offsetHeight;
+      if (distance <= 0) return;
+      const progress = (top - track.getBoundingClientRect().top) / distance;
+      setActive(Math.max(0, Math.min(profiles.length - 1, Math.floor(progress * profiles.length))));
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    const measure = () => {
+      // Taller previews can scroll fully into view on small screens.
+      track.style.setProperty("--preview-height", `${panel.offsetHeight}px`);
+      track.style.setProperty("--preview-top", `${Math.min(24, window.innerHeight - panel.offsetHeight - 24)}px`);
+      schedule();
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(panel);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
+  const selectProfile = (index: number) => {
+    const track = trackRef.current;
+    const panel = panelRef.current;
+    if (!track || !panel) return;
+    const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
+    const distance = track.offsetHeight - panel.offsetHeight;
+    window.scrollTo({
+      top: window.scrollY + track.getBoundingClientRect().top - top +
+        distance * ((index + 0.5) / profiles.length),
+      behavior: "instant",
+    });
+    setActive(index);
+  };
   const profile = profiles[active];
   return (
     <section className="showcase section" id="plataforma">
@@ -236,6 +288,8 @@ export default function FeatureShowcase() {
             na especies.
           </p>
         </div>
+        <div className="showcase-track" ref={trackRef}>
+        <div className="showcase-sticky" ref={panelRef}>
         <div
           className="profile-tabs"
           aria-label="Escolha um perfil profissional"
@@ -246,7 +300,7 @@ export default function FeatureShowcase() {
               key={p.label}
               aria-pressed={i === active}
               aria-controls="profile-preview"
-              onClick={() => setActive(i)}
+              onClick={() => selectProfile(i)}
             >
               {p.label}
               <span aria-hidden="true">↗</span>
@@ -296,6 +350,8 @@ export default function FeatureShowcase() {
               DO REGISTRO À CONTINUIDADE DO CUIDADO
             </span>
           </div>
+        </div>
+        </div>
         </div>
       </div>
     </section>
