@@ -1,304 +1,303 @@
 "use client";
+import Image from "next/image";
+import { useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
-import { motion, useScroll } from "motion/react";
-import { useEffect, useRef, useState } from "react";
 
-const screens = [
+const profiles = [
   {
-    eyebrow: "VISÃO GERAL",
-    title: "Comece o dia com tudo sob controle.",
+    label: "Gestão",
+    title: "Uma equipe inteira. Uma visão compartilhada.",
     description:
-      "Na tela inicial, acompanhe os animais, os alertas e as tarefas prioritárias da sua equipe em uma só visão.",
-    image: "/images/home_screen.svg",
-    alt: "Tela inicial do aplicativo Espécies",
+      "Acompanhe quem está em atividade e conecte os responsáveis aos cuidados de cada animal.",
+    features: [
+      "Profissionais em atividade",
+      "Responsáveis por cada procedimento",
+      "Visão da rotina da equipe",
+    ],
+    screen: "Funcionários ativos",
+    node: "14799:18883",
   },
   {
-    eyebrow: "PERFIL DO ANIMAL",
-    title: "As informações de cada animal, sempre à mão.",
+    label: "Veterinária",
+    title: "O próximo cuidado começa com contexto.",
     description:
-      "Ao selecionar um animal, consulte o seu perfil completo com dados de identificação, saúde e informações relevantes para o manejo.",
-    image: "/images/animal_profile_screen.svg",
-    alt: "Tela de perfil de animal do aplicativo Espécies",
+      "Consulte o animal, identifique cuidados especiais e acompanhe os procedimentos previstos.",
+    features: [
+      "Procedimentos agendados",
+      "Identificação do animal",
+      "Alertas de cuidados especiais",
+    ],
+    screen: "Procedimentos",
+    node: "14804:45637",
   },
   {
-    eyebrow: "PROCEDIMENTOS",
-    title: "Acompanhe o cuidado do início ao fim.",
+    label: "Biologia",
+    title: "Cada observação ajuda a entender melhor.",
     description:
-      "Veja os procedimentos pendentes, o histórico de atendimentos e qual profissional realizou cada cuidado daquele animal.",
-    image: "/images/procedures_profile_screen.svg",
-    alt: "Tela de procedimentos e histórico de um animal no aplicativo Espécies",
+      "Registre as interações e os sinais observados para dar continuidade ao acompanhamento do bem-estar animal.",
+    features: [
+      "Interações individuais ou em grupo",
+      "Registro de sinais de estresse",
+      "Observações de comportamento",
+    ],
+    screen: "Interação animal",
+    node: "14799:17822",
+  },
+  {
+    label: "Manejo e nutrição",
+    title: "O cuidado diário também merece memória.",
+    description:
+      "Organize o registro das refeições com o animal, o colaborador e a aceitação do alimento no mesmo fluxo.",
+    features: [
+      "Animal e colaborador",
+      "Tipo e quantidade de alimento",
+      "Registro de alimento rejeitado",
+    ],
+    screen: "Adicionar refeição",
+    node: "14799:19599",
   },
 ];
+const people = [
+  ["amanda", "Amanda Ribeiro", "Gifa · Vacina"],
+  ["leonardo", "Leonardo Vieira", "Caco · Vermifugação"],
+  ["bruna", "Bruna Pereira", "Zazu · Tosa"],
+];
 
-function ScreenTabs({
-  activeScreen,
-  onSelect,
-}: {
-  activeScreen: number;
-  onSelect: (index: number) => void;
-}) {
-  const labels = ["Tela inicial", "Perfil do animal", "Procedimentos"];
+function TeamRows() {
   return (
-    <div className="grid w-full grid-cols-3 rounded-2xl border border-white/20 bg-white/10 p-1 font-sarabun backdrop-blur-sm sm:max-w-xl">
-      {labels.map((label, index) => (
-        <button
-          key={label}
-          type="button"
-          aria-pressed={index === activeScreen}
-          onClick={() => onSelect(index)}
-          className={`rounded-xl px-2 py-2 text-center text-xs font-bold transition-all sm:px-4 sm:py-3 sm:text-sm ${
-            index === activeScreen
-              ? "bg-[#FFCD52] text-[#123f3c] shadow-sm"
-              : "text-white/75 hover:bg-white/10 hover:text-white"
-          }`}
-        >
-          {label}
-        </button>
+    <div className="team-rows">
+      {people.map(([image, name, task]) => (
+        <div className="team-row" key={name}>
+          <Image src={`/images/figma/${image}.png`} width={48} height={48} alt="" />
+          <div><strong>{name}</strong><span>{task}</span></div>
+          <span className="app-chip">Em atividade</span>
+        </div>
       ))}
     </div>
   );
 }
 
-function PhonePreview({
-  activeScreen,
-  isMobile = false,
-}: {
-  activeScreen: number;
-  isMobile?: boolean;
-}) {
+function ProcedureCard() {
   return (
-    <div
-      className={`relative z-10 rounded-[2.2rem] sm:rounded-[2.6rem] bg-[#202733] p-1.5 sm:p-2.5 shadow-[0_25px_60px_rgba(0,0,0,0.5)] ${
-        isMobile
-          ? "h-[min(73dvh,640px)] w-auto aspect-[430/932] max-w-[94vw]"
-          : "w-[236px] sm:w-[280px]"
-      }`}
-    >
-      <div className="relative h-full w-full aspect-[430/932] overflow-hidden rounded-[1.7rem] sm:rounded-[2rem] bg-white">
-        {screens.map((screen, index) => {
-          const isActive = index === activeScreen;
-          return (
-            <img
-              key={screen.image}
-              src={screen.image}
-              alt={screen.alt}
-              loading="eager"
-              className={`absolute inset-0 z-10 h-full w-full object-cover transition-all duration-300 ease-out will-change-transform ${
-                isActive
-                  ? "opacity-100 translate-x-0 pointer-events-auto"
-                  : index < activeScreen
-                  ? "opacity-0 -translate-x-3 pointer-events-none"
-                  : "opacity-0 translate-x-3 pointer-events-none"
-              }`}
-            />
-          );
-        })}
+    <div className="procedure-card" data-node-id="14804:45637">
+      <Image
+        src="/images/figma/sosa.png"
+        width={144}
+        height={177}
+        alt="Onça-pintada Sosa"
+      />
+      <strong>Sosa</strong>
+      <span>Espécie</span>
+      <div className="procedure-data">
+        <div>
+          Procedimento<b>Vacina</b>
+        </div>
+        <div>
+          Data<b>26/02 · 10h00</b>
+        </div>
       </div>
-      <div className="pointer-events-none absolute left-1/2 top-2 sm:top-2.5 h-3 sm:h-3.5 w-16 sm:w-20 -translate-x-1/2 rounded-full bg-[#202733]" />
     </div>
   );
 }
-
-export default function FeatureShowcase() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const desktopTrackRef = useRef<HTMLDivElement>(null);
-  const mobileTrackRef = useRef<HTMLDivElement>(null);
-  const screenRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const [activeScreen, setActiveScreen] = useState(0);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-
-  useEffect(() => {
-    let ticking = false;
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          if (window.innerWidth >= 1024) {
-            const viewportCenter = window.innerHeight / 2;
-            let closestIndex = 0;
-            let minDistance = Number.POSITIVE_INFINITY;
-            screenRefs.current.forEach((el, index) => {
-              if (!el) return;
-              const rect = el.getBoundingClientRect();
-              const distance = Math.abs(rect.top + rect.height / 2 - viewportCenter);
-              if (distance < minDistance) {
-                minDistance = distance;
-                closestIndex = index;
-              }
-            });
-            setActiveScreen((prev) => (prev !== closestIndex ? closestIndex : prev));
-          } else {
-            if (!mobileTrackRef.current) {
-              ticking = false;
-              return;
-            }
-            const rect = mobileTrackRef.current.getBoundingClientRect();
-            const scrollableDistance = mobileTrackRef.current.offsetHeight - window.innerHeight;
-            if (scrollableDistance <= 0) {
-              ticking = false;
-              return;
-            }
-            const progress = Math.max(0, Math.min(1, -rect.top / scrollableDistance));
-            let newIndex = 0;
-            if (progress < 0.33) {
-              newIndex = 0;
-            } else if (progress < 0.66) {
-              newIndex = 1;
-            } else {
-              newIndex = 2;
-            }
-            setActiveScreen((prev) => (prev !== newIndex ? newIndex : prev));
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleScroll);
-    };
-  }, []);
-
-  const navigateToScreen = (index: number) => {
-    setActiveScreen(index);
-    if (window.innerWidth >= 1024) {
-      screenRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "center" });
-    } else if (mobileTrackRef.current) {
-      const rect = mobileTrackRef.current.getBoundingClientRect();
-      const scrollTop = window.scrollY || document.documentElement.scrollTop;
-      const trackTop = rect.top + scrollTop;
-      const scrollableDistance = mobileTrackRef.current.offsetHeight - window.innerHeight;
-      const targetOffset =
-        index === 0
-          ? 0
-          : index === 1
-          ? scrollableDistance * 0.5
-          : scrollableDistance;
-
-      window.scrollTo({
-        top: trackTop + targetOffset,
-        behavior: "smooth",
-      });
-    }
-  };
-
+function AnimalCard() {
   return (
-    <section
-      id="sobre"
-      ref={sectionRef}
-      className="relative overflow-x-clip bg-[#0b3b37] px-4 py-12 sm:px-10 lg:px-16 lg:py-0"
-    >
-      {/* Header informativo */}
-      <div className="mx-auto max-w-6xl py-12 text-center lg:py-28">
-        <p className="font-sarabun text-sm font-bold tracking-[0.16em] text-[#FFCD52]">
-          A PLATAFORMA EM AÇÃO
-        </p>
-        <h2 className="mx-auto mt-4 max-w-6xl text-balance font-sarabun text-3xl font-semibold leading-tight text-white sm:text-5xl lg:text-7xl">
-          Tudo o que sua equipe precisa, na palma da mão.
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl font-sarabun text-base leading-relaxed text-[#d1e6df] sm:text-lg lg:max-w-none lg:whitespace-nowrap">
-          Conheça o caminho completo, da visão do dia ao histórico de cuidados de cada animal.
-        </p>
-      </div>
-
-      {/* MOBILE VIEW (< lg): Container com altura de scroll e sticky viewport */}
-      <div ref={mobileTrackRef} className="relative h-[250vh] lg:hidden">
-        <div className="sticky top-0 flex h-dvh w-full flex-col items-center justify-center overflow-hidden px-3 py-1.5 sm:py-3">
-          {/* Abas no topo logo acima da tela */}
-          <div className="w-full max-w-xs sm:max-w-sm shrink-0">
-            <ScreenTabs activeScreen={activeScreen} onSelect={navigateToScreen} />
-          </div>
-
-          {/* Mockup do celular com altura máxima ocupando o espaço central */}
-          <div className="relative my-1.5 sm:my-2 flex shrink-0 items-center justify-center">
-            <PhonePreview activeScreen={activeScreen} isMobile />
-          </div>
-
-          {/* Descrição da tela ativa com layout estável em grid */}
-          <div className="shrink-0 relative grid w-full max-w-sm grid-cols-1 grid-rows-1 items-center justify-items-center text-center px-2 min-h-[76px] sm:min-h-[84px]">
-            {screens.map((screen, idx) => {
-              const isActive = idx === activeScreen;
-              return (
-                <div
-                  key={screen.title}
-                  className={`col-start-1 row-start-1 flex flex-col items-center px-1 transition-all duration-300 ease-out ${
-                    isActive
-                      ? "opacity-100 translate-y-0 pointer-events-auto"
-                      : "opacity-0 translate-y-1 pointer-events-none"
-                  }`}
-                  aria-hidden={!isActive}
-                >
-                  <p className="font-sarabun text-[10px] sm:text-xs font-bold tracking-[0.12em] text-[#FFCD52]">
-                    {screen.eyebrow}
-                  </p>
-                  <h3 className="mt-0.5 font-sarabun text-sm sm:text-base font-semibold leading-snug text-white">
-                    {screen.title}
-                  </h3>
-                  <p className="mt-0.5 font-sarabun text-[11px] leading-relaxed text-[#d1e6df] sm:text-xs line-clamp-2">
-                    {screen.description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* DESKTOP VIEW (>= lg): Grid de 2 Colunas perfeitamente delimitado no final */}
-      <div ref={desktopTrackRef} className="hidden lg:block mx-auto max-w-6xl pb-16">
-        <div className="grid grid-cols-2 gap-20 items-start">
-          {/* Coluna Esquerda: Abas fixas e 3 seções de tela de altura 100vh */}
-          <div className="relative">
-            <div className="sticky top-6 z-30 mb-0 pt-6">
-              <ScreenTabs activeScreen={activeScreen} onSelect={navigateToScreen} />
-            </div>
-            {screens.map((screen, index) => (
-              <div
-                key={screen.title}
-                ref={(element) => {
-                  screenRefs.current[index] = element;
-                }}
-                className="flex h-screen items-center"
-              >
-                <article className="max-w-md">
-                  <p className="font-sarabun text-sm font-bold tracking-[0.12em] text-[#FFCD52]">
-                    {screen.eyebrow}
-                  </p>
-                  <h3 className="mt-4 font-sarabun text-3xl font-semibold leading-tight text-white sm:text-4xl">
-                    {screen.title}
-                  </h3>
-                  <p className="mt-5 font-sarabun text-lg leading-relaxed text-[#d1e6df]">
-                    {screen.description}
-                  </p>
-                </article>
-              </div>
-            ))}
-          </div>
-
-          {/* Coluna Direita: Mockup sticky que destrava exatamente no final da 3ª tela */}
-          <div className="sticky top-0 flex h-screen items-center justify-center self-start">
-            <div className="relative flex h-[min(78vh,720px)] w-full max-w-[560px] items-center justify-center overflow-hidden rounded-[3rem] bg-[#FF8B3E] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]">
-              <div className="absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-[#FFCD52]/35 blur-3xl" />
-              <div className="absolute -left-20 top-1/4 h-56 w-56 rounded-full bg-white/15 blur-3xl" />
-              <PhonePreview activeScreen={activeScreen} />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Barra de progresso fixa no topo */}
-      <motion.div
-        style={{ scaleX: scrollYProgress }}
-        className="fixed left-0 top-0 z-50 h-1 w-full origin-left bg-[#FF8B3E]"
+    <div className="animal-card" data-node-id="14799:19055">
+      <Image
+        src="/images/figma/sosa-profile.png"
+        width={382}
+        height={382}
+        alt="Sosa, onça-pintada"
       />
+      <div>
+        <strong>Sosa</strong>
+        <span>Panthera onca</span>
+        <small>Recinto L11 · Fêmea</small>
+      </div>
+    </div>
+  );
+}
+function Choice({ label, options }: { label: string; options: string[] }) {
+  const [selected, setSelected] = useState(options[0]);
+  return (
+    <fieldset className="demo-choice">
+      <legend>{label}</legend>
+      <div>
+        {options.map((option) => (
+          <button
+            type="button"
+            key={option}
+            aria-pressed={selected === option}
+            onClick={() => setSelected(option)}
+          >
+            {option}
+          </button>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+function ScreenContent({ active }: { active: number }) {
+  if (active === 0) return <><TeamRows /><div className="screen-note">Pessoas e cuidados, lado a lado.</div></>;
+  if (active === 1)
+    return (
+      <>
+        <div className="app-alert">
+          Em tratamento e requer cuidados especiais.
+        </div>
+        <ProcedureCard />
+        <AnimalCard />
+      </>
+    );
+  if (active === 2)
+    return (
+      <>
+        <Choice label="Público" options={["Individual", "Grupo"]} />
+        <Choice
+          label="Animal apresentou sinais de estresse?"
+          options={["Sim", "Moderado", "Não"]}
+        />
+        <label className="demo-observation">
+          Observação
+          <textarea
+            placeholder="Experimente registrar uma observação…"
+            maxLength={300}
+          />
+        </label>
+        <p className="demo-footnote">
+          Demonstração. Nenhum registro é salvo no aplicativo.
+        </p>
+      </>
+    );
+  return (
+    <>
+      <div className="demo-field">
+        <span>Colaborador</span>
+        <strong>Jeffers...</strong>
+      </div>
+      <div className="demo-field">
+        <span>Animal (apelido)</span>
+        <strong>Zazu</strong>
+      </div>
+      <Choice label="Alimento rejeitado" options={["Não", "Sim"]} />
+      <Choice
+        label="Tipo de alimento"
+        options={["Vivo", "Abatido", "Preparado"]}
+      />
+      <div className="food-row">
+        <span>Quantidade de alimento</span>
+        <strong>
+          Manga <small>100 g</small>
+        </strong>
+      </div>
+    </>
+  );
+}
+export function HeroPreview() {
+  return (
+    <div className="hero-keeper">
+      <Image
+        src="/images/zookeeper.png"
+        width={727}
+        height={935}
+        alt="Tratadora consultando informações no celular"
+        priority
+        sizes="(max-width: 900px) 90vw, 48vw"
+        className="hero-keeper-image"
+      />
+      <Image
+        src="/images/screen_model.png"
+        width={458}
+        height={234}
+        alt="Histórico de manejos no aplicativo especies"
+        priority
+        sizes="(max-width: 900px) 75vw, 32vw"
+        className="hero-management-history"
+      />
+    </div>
+  );
+}
+export default function FeatureShowcase() {
+  const [active, setActive] = useState(0);
+  const reduced = useReducedMotion();
+  const profile = profiles[active];
+  return (
+    <section className="showcase section" id="plataforma">
+      <div className="container">
+        <div className="showcase-heading">
+          <p className="eyebrow">CONHEÇA O APLICATIVO</p>
+          <h2>
+            Muitos olhares.
+            <br />
+            <em>O mesmo cuidado.</em>
+          </h2>
+          <p>
+            Explore as prévias e descubra como diferentes rotinas se encontram
+            na especies.
+          </p>
+        </div>
+        <div
+          className="profile-tabs"
+          aria-label="Escolha um perfil profissional"
+        >
+          {profiles.map((p, i) => (
+            <button
+              type="button"
+              key={p.label}
+              aria-pressed={i === active}
+              aria-controls="profile-preview"
+              onClick={() => setActive(i)}
+            >
+              {p.label}
+              <span aria-hidden="true">↗</span>
+            </button>
+          ))}
+        </div>
+        <div className="showcase-grid" id="profile-preview">
+          <div className="feature-copy" aria-live="polite">
+            <span className="feature-index">
+              0{active + 1} / {profile.label.toUpperCase()}
+            </span>
+            <h3>{profile.title}</h3>
+            <p>{profile.description}</p>
+            <ul>
+              {profile.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+            <p className="preview-disclaimer">
+              Prévia do produto em desenvolvimento.
+              <br />
+              Dados ilustrativos do design.
+            </p>
+          </div>
+          <div className="demo-stage">
+            <motion.div
+              key={active}
+              className="app-window"
+              data-node-id={profile.node}
+              initial={reduced ? false : { opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="app-topline">
+                <Image
+                  src="/images/full_logo.svg"
+                  width={96}
+                  height={28}
+                  alt="especies"
+                />
+                <span>PRÉVIA INTERATIVA</span>
+              </div>
+              <h4>{profile.screen}</h4>
+              <ScreenContent active={active} />
+            </motion.div>
+            <span className="stage-caption">
+              DO REGISTRO À CONTINUIDADE DO CUIDADO
+            </span>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
