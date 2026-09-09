@@ -30,7 +30,7 @@ export default function MobileNavigation() {
             Para sua equipe
           </a>
           <a href="#construcao" onClick={() => setOpen(false)}>
-            Construção conjunta
+            A pesquisa
           </a>
           <a href={researchUrl}>Participar da pesquisa ↗</a>
         </nav>

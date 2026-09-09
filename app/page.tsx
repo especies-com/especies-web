@@ -1,3 +1,4 @@
+import ResearchSections from "./components/ResearchSections";
 import Image from "next/image";
 import FeatureShowcase, { HeroPreview } from "./components/FeatureShowcase";
 import MobileNavigation from "./components/MobileNavigation";
@@ -23,7 +24,7 @@ export default function Home() {
           <nav aria-label="Navegação principal">
             <a href="#plataforma">O aplicativo</a>
             <a href="#equipe">Para sua equipe</a>
-            <a href="#construcao">Construção conjunta</a>
+            <a href="#construcao">A pesquisa</a>
           </nav>
           <a className="button button-small" href={researchUrl}>
             Participar da pesquisa <span aria-hidden="true">↗</span>
@@ -132,49 +133,13 @@ export default function Home() {
                 apenas responder, conversar com a equipe ou indicar interesse em
                 um piloto.
               </p>
-              <a className="text-link" href={researchUrl}>
-                Conheça a pesquisa ↗
+              <a className="text-link" href="#programa">
+                Conheça o programa ↓
               </a>
             </aside>
           </div>
         </section>
-        <section className="container section faq">
-          <div>
-            <p className="eyebrow">PRÓXIMOS PASSOS</p>
-            <h2>
-              Uma construção
-              <br />
-              <em>com transparência.</em>
-            </h2>
-          </div>
-          <div>
-            <details>
-              <summary>O aplicativo já está disponível?</summary>
-              <p>
-                A especies está em desenvolvimento, ainda sem data de lançamento
-                confirmada. As telas apresentadas são prévias e podem evoluir
-                com a pesquisa.
-              </p>
-            </details>
-            <details>
-              <summary>Para quem a plataforma está sendo construída?</summary>
-              <p>
-                Para equipes de instituições de fauna: manejo, medicina
-                veterinária, biologia, nutrição, educação ambiental e gestão.
-              </p>
-            </details>
-            <details>
-              <summary>
-                Participar da pesquisa é contratar o aplicativo?
-              </summary>
-              <p>
-                Não. A pesquisa busca entender sua realidade. Responder é
-                gratuito e não cria compromisso de compra ou de participação em
-                testes.
-              </p>
-            </details>
-          </div>
-        </section>
+        <ResearchSections />
       </main>
       <footer className="container footer">
         <Image
