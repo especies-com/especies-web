@@ -1,6 +1,7 @@
 import ResearchSections from "./components/ResearchSections";
 import Image from "next/image";
-import FeatureShowcase, { HeroPreview } from "./components/FeatureShowcase";
+import { HeroPreview } from "./components/FeatureShowcase";
+// import FeatureShowcase from "./components/FeatureShowcase";
 import MobileNavigation from "./components/MobileNavigation";
 import { researchUrl } from "./lib/site";
 
@@ -22,13 +23,12 @@ export default function Home() {
             />
           </a>
           <nav aria-label="Navegação principal">
+            {/* Retomar após validar as telas nas pesquisas.
             <a href="#plataforma">O aplicativo</a>
+            */}
             <a href="#equipe">Para sua equipe</a>
             <a href="#construcao">A pesquisa</a>
           </nav>
-          <a className="button button-small" href={researchUrl}>
-            Participar da pesquisa <span aria-hidden="true">↗</span>
-          </a>
           <MobileNavigation />
         </div>
       </header>
@@ -48,11 +48,13 @@ export default function Home() {
               </p>
               <div className="hero-actions">
                 <a className="button" href={researchUrl}>
-                  Ajude a construir a especies <span aria-hidden="true">↗</span>
+                  Participar da pesquisa <span aria-hidden="true">↗</span>
                 </a>
+                {/* Retomar junto com a seção Conheça o aplicativo.
                 <a className="text-link" href="#plataforma">
                   Explore o aplicativo ↓
                 </a>
+                */}
               </div>
               <p className="availability">
                 Em desenvolvimento para iOS, Android e Web.
@@ -61,6 +63,7 @@ export default function Home() {
             <HeroPreview />
           </div>
         </section>
+        <div className="audiences-band">
         <section className="audiences container" aria-label="Instituições">
           <p>
             Diferentes instituições.{" "}
@@ -72,7 +75,10 @@ export default function Home() {
             de fauna
           </div>
         </section>
+        </div>
+        {/* Conheça o aplicativo: aguarda validação das telas nas pesquisas.
         <FeatureShowcase />
+        */}
         <section className="container section connection" id="equipe">
           <div>
             <p className="eyebrow">CADA PROFISSIONAL, UMA PARTE DA HISTÓRIA</p>
@@ -133,9 +139,6 @@ export default function Home() {
                 apenas responder, conversar com a equipe ou indicar interesse em
                 um piloto.
               </p>
-              <a className="text-link" href="#programa">
-                Conheça o programa ↓
-              </a>
             </aside>
           </div>
         </section>
@@ -149,7 +152,6 @@ export default function Home() {
           alt="especies"
         />
         <p>Tecnologia para aproximar pessoas, dados e o cuidado com a vida.</p>
-        <a href={researchUrl}>Contribuir com a pesquisa ↗</a>
         <small>© {new Date().getFullYear()} especies</small>
       </footer>
     </>

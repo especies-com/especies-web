@@ -79,10 +79,6 @@ export default function ResearchSections() {
               participação ajuda a construir uma plataforma que faça sentido
               dentro dos recintos, na rotina da equipe e nas decisões da gestão.
             </p>
-            <a className="text-link" href={researchUrl}>
-              Quero compartilhar minha experiência{" "}
-              <span aria-hidden="true">↗</span>
-            </a>
           </div>
         </section>
         <section className="building section" id="temas">
@@ -107,7 +103,6 @@ export default function ResearchSections() {
                 <article key={number}>
                   <span className="topic-number">
                     {number}
-                    <span aria-hidden="true">↗</span>
                   </span>
                   <h3>{title}</h3>
                   <p>{description}</p>
@@ -196,9 +191,6 @@ export default function ResearchSections() {
               contratação. Responder não garante vaga em um piloto e não gera
               cobrança.
             </p>
-            <a href={researchUrl} className="button button-teal">
-              Participar da pesquisa <span aria-hidden="true">↗</span>
-            </a>
           </aside>
         </section>
         <section className="how-section">
@@ -269,7 +261,7 @@ export default function ResearchSections() {
               </h2>
             </div>
             <a className="button button-yellow" href={researchUrl}>
-              Quero contribuir <span aria-hidden="true">↗</span>
+              Participar da pesquisa <span aria-hidden="true">↗</span>
             </a>
           </div>
         </section>

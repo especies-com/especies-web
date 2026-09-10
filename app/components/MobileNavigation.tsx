@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { researchUrl } from "../lib/site";
 export default function MobileNavigation() {
   const [open, setOpen] = useState(false);
   return (
@@ -23,16 +22,17 @@ export default function MobileNavigation() {
       </button>
       {open && (
         <nav id="mobile-menu" aria-label="Navegação móvel">
+          {/* Retomar após validar as telas nas pesquisas.
           <a href="#plataforma" onClick={() => setOpen(false)}>
             O aplicativo
           </a>
+          */}
           <a href="#equipe" onClick={() => setOpen(false)}>
             Para sua equipe
           </a>
           <a href="#construcao" onClick={() => setOpen(false)}>
             A pesquisa
           </a>
-          <a href={researchUrl}>Participar da pesquisa ↗</a>
         </nav>
       )}
     </div>
