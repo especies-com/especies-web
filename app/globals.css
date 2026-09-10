@@ -448,6 +448,93 @@ em {
   letter-spacing: 1.2px;
   color: #577467;
 }
+.walkthrough {
+  background: var(--teal-dark);
+  color: var(--background);
+}
+.walkthrough-heading { max-width: 720px; }
+.walkthrough-heading .eyebrow { color: var(--yellow); }
+.walkthrough-heading > p:last-child {
+  max-width: 590px;
+  margin-top: 24px;
+  color: #d9e9e3;
+  line-height: 1.7;
+}
+.walkthrough-track {
+  margin-top: 36px;
+  height: calc(var(--walkthrough-height, 650px) + 160svh);
+}
+.walkthrough-panel {
+  position: sticky;
+  top: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 24px 64px;
+  padding-block: 16px;
+}
+.walkthrough-controls { display: flex; flex-wrap: wrap; gap: 8px; }
+.walkthrough-controls button {
+  border: 1px solid #ffffff45;
+  border-radius: 8px;
+  background: transparent;
+  padding: 11px 14px;
+  color: inherit;
+  font-size: 13px;
+}
+.walkthrough-controls button:hover { background: #ffffff15; }
+.walkthrough-controls button[aria-pressed="true"] {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--teal-dark);
+}
+.walkthrough-controls button:focus-visible { outline-color: var(--yellow); }
+.walkthrough-descriptions { display: grid; margin-top: 40px; }
+.walkthrough-descriptions > div { grid-area: 1 / 1; }
+.walkthrough-descriptions > div[aria-hidden="true"] { pointer-events: none; }
+.walkthrough-number { color: var(--yellow); font-size: 12px; letter-spacing: 2px; }
+.walkthrough-descriptions h3 { font-size: clamp(27px, 3vw, 39px); line-height: 1.15; margin: 18px 0; }
+.walkthrough-descriptions p { line-height: 1.7; color: #d9e9e3; max-width: 430px; }
+.walkthrough-note { margin-top: 32px; font-size: 12px; color: #d9e9e3; }
+.walkthrough-stage {
+  display: flex;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 28px;
+  background: #e6efe5;
+}
+.walkthrough-phone {
+  width: min(320px, calc((100svh - 110px) * 0.4614));
+  max-width: 100%;
+  padding: 7px;
+  border-radius: 30px;
+  background: var(--foreground);
+  box-shadow: 0 20px 40px #103e3930;
+}
+.walkthrough-display { position: relative; aspect-ratio: 430 / 932; overflow: hidden; border-radius: 24px; background: white; }
+.walkthrough-display > div { position: absolute; inset: 0; }
+.walkthrough-display img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.walkthrough-progress { grid-column: 1 / -1; height: 2px; background: #ffffff25; }
+.walkthrough-progress > div { height: 100%; background: var(--yellow); transform-origin: left; }
+@media (max-width: 760px) {
+  .walkthrough-panel { top: 12px; grid-template-columns: 1fr; gap: 12px; padding-block: 8px; }
+  .walkthrough-controls { flex-wrap: nowrap; gap: 6px; }
+  .walkthrough-controls button { flex: 1; font-size: 11px; padding: 9px 5px; }
+  .walkthrough-descriptions { margin-top: 16px; }
+  .walkthrough-number { display: none; }
+  .walkthrough-descriptions h3 { font-size: 23px; margin: 0 0 8px; }
+  .walkthrough-descriptions p { font-size: 13px; line-height: 1.5; }
+  .walkthrough-note { margin-top: 12px; font-size: 11px; }
+  .walkthrough-stage { padding: 8px; border-radius: 18px; }
+  .walkthrough-phone { width: min(300px, calc((100svh - 270px) * 0.4614)); padding: 5px; border-radius: 23px; }
+  .walkthrough-display { border-radius: 18px; }
+}
+/* Short viewports and reduced motion use the same screen controls without a long scroll track. */
+@media (max-height: 650px), (prefers-reduced-motion: reduce) {
+  .walkthrough-track { height: auto; }
+  .walkthrough-panel { position: relative; top: auto; }
+  .walkthrough-phone { width: 300px; max-width: 100%; }
+}
 .audiences-band {
   background: var(--teal-dark);
   color: var(--background);

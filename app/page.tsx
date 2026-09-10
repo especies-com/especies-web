@@ -1,4 +1,5 @@
 import ResearchSections from "./components/ResearchSections";
+import AppWalkthrough from "./components/AppWalkthrough";
 import Image from "next/image";
 import { HeroPreview } from "./components/FeatureShowcase";
 // import FeatureShowcase from "./components/FeatureShowcase";
@@ -106,6 +107,7 @@ export default function Home() {
             <span aria-hidden="true">→</span> Acompanhar
           </div>
         </section>
+        <AppWalkthrough />
         <section className="research-section" id="construcao">
           <div className="container research-grid">
             <div>
