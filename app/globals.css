@@ -200,10 +200,11 @@ em {
   padding-block: 94px 105px;
 }
 .hero h1 {
-  font-size: clamp(42px, 4.5vw, 62px);
+  font-size: min(56px, 9.3cqw);
   line-height: 1.08;
-  letter-spacing: -2.6px;
+  letter-spacing: -0.035em;
   font-weight: 600;
+  white-space: nowrap;
 }
 .intro {
   font-size: 18px;
@@ -956,9 +957,6 @@ h2 {
     gap: 15px;
     font-size: 12px;
   }
-  .hero h1 {
-    font-size: 45px;
-  }
   .hero-grid {
     gap: 24px;
   }
@@ -1044,10 +1042,6 @@ h2 {
     grid-template-columns: 1fr;
     padding-block: 55px 60px;
     gap: 35px;
-  }
-  .hero h1 {
-    font-size: clamp(39px, 8vw, 55px);
-    letter-spacing: -1.8px;
   }
   .hero .intro {
     max-width: 560px;
@@ -1205,9 +1199,6 @@ h2 {
   .container {
     width: calc(100% - 32px);
   }
-  .hero h1 {
-    font-size: 37px;
-  }
   .button {
     gap: 16px;
     font-size: 14px;
@@ -1284,6 +1275,8 @@ h2 {
   align-items: stretch;
 }
 .hero-copy {
+  container-type: inline-size;
+  min-width: 0;
   align-self: center;
   padding-block: 48px;
 }

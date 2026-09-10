@@ -38,9 +38,9 @@ export default function Home() {
           <div className="container hero-grid">
             <div className="hero-copy">
               <h1>
-                O cuidado conecta.
+                Gestão de fauna simples.
                 <br />
-                <em>A especies reúne.</em>
+                <em>Mais tempo para cuidar.</em>
               </h1>
               <p className="intro">
                 Animais, pessoas e informações no mesmo lugar. Um aplicativo

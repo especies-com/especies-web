@@ -33,16 +33,16 @@ const faq = [
     "Não. Responder à pesquisa é gratuito e não cria compromisso de compra, assinatura ou participação em testes. Queremos conhecer sua realidade, inclusive se as ferramentas atuais já atendem bem.",
   ],
   [
-    "Como funciona o desconto no lançamento?",
-    "Quem responder e optar por receber novidades será informado sobre uma condição especial de assinatura no lançamento. O percentual, os planos elegíveis e a duração do desconto ainda serão definidos e comunicados antes de qualquer contratação.",
+    "Qual é o benefício de responder à pesquisa?",
+    "Sua instituição terá acesso a um desconto na assinatura no lançamento por contribuir com esta pesquisa. Não é necessário participar de conversas ou testes para receber esse benefício. Para receber os detalhes, escolha a opção de novidades e condição de lançamento ao final do formulário. O percentual, os planos elegíveis e a duração do desconto serão informados antes de qualquer contratação.",
   ],
   [
     "O aplicativo já está disponível?",
     "A plataforma está em desenvolvimento. O projeto contempla iOS, Android e Web, com prioridades orientadas pelas necessidades das instituições. Ainda não há uma data de lançamento confirmada.",
   ],
   [
-    "Responder me compromete com o programa de testes?",
-    "Não. Ao final, você pode indicar interesse em uma conversa ou em avaliar um piloto. Escopo, disponibilidade da equipe, duração e condições serão combinados separadamente antes de qualquer teste.",
+    "Posso participar apenas da pesquisa?",
+    "Sim. Sua contribuição pode se encerrar no envio das respostas. Se quiser, ao final você pode indicar interesse em uma conversa ou em avaliar um piloto. Isso não confirma sua participação: os próximos passos serão combinados separadamente.",
   ],
 ];
 
@@ -154,10 +154,10 @@ export default function ResearchSections() {
             <div className="benefit-item">
               <span>03</span>
               <div>
-                <h3>Uma condição especial no lançamento</h3>
+                <h3>Desconto por responder à pesquisa</h3>
                 <p>
-                  Receba a proposta de desconto na assinatura quando os planos
-                  forem definidos, se optar pelo contato.
+                  Sua instituição terá acesso a um desconto na assinatura no
+                  lançamento. Escolha receber os detalhes ao final da pesquisa.
                 </p>
               </div>
             </div>
@@ -176,20 +176,20 @@ export default function ResearchSections() {
               %
             </span>
             <p>
-              Quem ajuda a construir
+              Sua experiência contribui.
               <br />
-              <strong>merece fazer parte.</strong>
+              <strong>Sua instituição ganha.</strong>
             </p>
             <div className="benefit-divider" />
             <h3>
-              Condição especial
+              Desconto para quem
               <br />
-              para quem participa.
+              responde à pesquisa.
             </h3>
             <p className="benefit-fineprint">
               Percentual, duração e planos elegíveis serão informados antes da
-              contratação. Responder não garante vaga em um piloto e não gera
-              cobrança.
+              contratação. Não é necessário participar de testes. Responder não
+              gera compromisso de contratação.
             </p>
           </aside>
         </section>

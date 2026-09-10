@@ -3,7 +3,7 @@ import "./globals.css";
 import { AmplitudeProvider } from "./components/AmplitudeProvider";
 
 export const metadata: Metadata = {
-  title: "especies | O cuidado conecta. A especies reúne.",
+  title: "especies | Gestão de fauna simples. Mais tempo para cuidar.",
   description:
     "Conheça o aplicativo especies: manejo, veterinária, biologia e gestão conectados ao cuidado com a fauna. Participe da pesquisa e ajude a construir a plataforma.",
 };
