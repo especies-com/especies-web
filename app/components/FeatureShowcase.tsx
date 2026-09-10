@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { useRef, useState } from "react";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
 
 
 const profiles = [
@@ -220,62 +220,26 @@ export function HeroPreview() {
 export default function FeatureShowcase() {
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    const panel = panelRef.current;
-    if (!track || !panel) return;
-    let frame = 0;
-
-    const update = () => {
-      frame = 0;
-      const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
-      const distance = track.offsetHeight - panel.offsetHeight;
-      if (distance <= 0) return;
-      const progress = (top - track.getBoundingClientRect().top) / distance;
-      setActive(Math.max(0, Math.min(profiles.length - 1, Math.floor(progress * profiles.length))));
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    const measure = () => {
-      // Taller previews can scroll fully into view on small screens.
-      track.style.setProperty("--preview-height", `${panel.offsetHeight}px`);
-      track.style.setProperty("--preview-top", `${Math.min(24, window.innerHeight - panel.offsetHeight - 24)}px`);
-      schedule();
-    };
-    const observer = new ResizeObserver(measure);
-    observer.observe(panel);
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", measure);
-    measure();
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", measure);
-    };
-  }, []);
-
+  const trackRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start start", "end end"] });
+  useMotionValueEvent(scrollYProgress, "change", (progress) => {
+    setActive(Math.max(0, Math.min(profiles.length - 1, Math.floor(progress * profiles.length))));
+  });
   const selectProfile = (index: number) => {
     const track = trackRef.current;
-    const panel = panelRef.current;
-    if (!track || !panel) return;
-    const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
-    const distance = track.offsetHeight - panel.offsetHeight;
+    if (!track) return;
     window.scrollTo({
-      top: window.scrollY + track.getBoundingClientRect().top - top +
-        distance * ((index + 0.5) / profiles.length),
+      top: window.scrollY + track.getBoundingClientRect().top +
+        (track.offsetHeight - window.innerHeight) * ((index + 0.5) / profiles.length),
       behavior: "instant",
     });
     setActive(index);
   };
   const profile = profiles[active];
   return (
-    <section className="showcase section" id="plataforma">
-      <div className="container">
+    <section className="showcase" id="plataforma" ref={trackRef}>
+      <div className="showcase-sticky">
+      <div className="container showcase-viewport">
         <div className="showcase-heading">
           <p className="eyebrow">CONHEÇA O APLICATIVO</p>
           <h2>
@@ -288,8 +252,6 @@ export default function FeatureShowcase() {
             na especies.
           </p>
         </div>
-        <div className="showcase-track" ref={trackRef}>
-        <div className="showcase-sticky" ref={panelRef}>
         <div
           className="profile-tabs"
           aria-label="Escolha um perfil profissional"
@@ -308,7 +270,11 @@ export default function FeatureShowcase() {
           ))}
         </div>
         <div className="showcase-grid" id="profile-preview">
-          <div className="feature-copy" aria-live="polite">
+          <motion.div key={active} className="feature-copy"
+            initial={reduced ? false : { opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0 : 0.25 }}
+          >
             <span className="feature-index">
               0{active + 1} / {profile.label.toUpperCase()}
             </span>
@@ -324,7 +290,7 @@ export default function FeatureShowcase() {
               <br />
               Dados ilustrativos do design.
             </p>
-          </div>
+          </motion.div>
           <div className="demo-stage">
             <motion.div
               key={active}
@@ -332,7 +298,7 @@ export default function FeatureShowcase() {
               data-node-id={profile.node}
               initial={reduced ? false : { opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: reduced ? 0 : 0.3 }}
             >
               <div className="app-topline">
                 <Image
@@ -350,7 +316,6 @@ export default function FeatureShowcase() {
               DO REGISTRO À CONTINUIDADE DO CUIDADO
             </span>
           </div>
-        </div>
         </div>
         </div>
       </div>
