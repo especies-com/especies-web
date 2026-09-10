@@ -69,20 +69,6 @@ export default function AppWalkthrough() {
     };
   }, []);
 
-  const selectScreen = (index: number) => {
-    const track = trackRef.current;
-    const panel = panelRef.current;
-    if (track && panel && getComputedStyle(panel).position === "sticky") {
-      const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
-      window.scrollTo({
-        top: window.scrollY + track.getBoundingClientRect().top - top +
-          (track.offsetHeight - panel.offsetHeight) * ((index + 0.5) / screens.length),
-        behavior: "instant",
-      });
-    }
-    setActive(index);
-  };
-
   return (
     <section className="walkthrough section" id="previa" aria-labelledby="walkthrough-title">
       <div className="container">
@@ -94,20 +80,11 @@ export default function AppWalkthrough() {
         <div className="walkthrough-track" ref={trackRef}>
           <div className="walkthrough-panel" ref={panelRef}>
             <div className="walkthrough-copy">
-              <div className="walkthrough-controls" aria-label="Escolha uma tela do aplicativo">
-                {screens.map((screen, index) => (
-                  <button key={screen.label} type="button" aria-pressed={active === index}
-                    aria-controls="walkthrough-preview" onClick={() => selectScreen(index)}>
-                    {screen.label}
-                  </button>
-                ))}
-              </div>
               <div className="walkthrough-descriptions">
                 {screens.map((screen, index) => (
                   <motion.div key={screen.label} aria-hidden={active !== index}
                     initial={false} animate={{ opacity: active === index ? 1 : 0, y: reducedMotion || active === index ? 0 : 12 }}
                     transition={{ duration: reducedMotion ? 0 : 0.3 }}>
-                    <span className="walkthrough-number">0{index + 1} / 03</span>
                     <h3>{screen.title}</h3>
                     <p>{screen.description}</p>
                   </motion.div>
@@ -132,6 +109,25 @@ export default function AppWalkthrough() {
               <motion.div initial={false} animate={{ scaleX: (active + 1) / screens.length }} transition={{ duration: reducedMotion ? 0 : 0.3 }} />
             </div>
           </div>
+        </div>
+        <div className="walkthrough-static">
+          {screens.map((screen) => (
+            <article className="walkthrough-panel" key={screen.image}>
+              <div className="walkthrough-copy">
+                <div className="walkthrough-descriptions">
+                  <div><h3>{screen.title}</h3><p>{screen.description}</p></div>
+                </div>
+                <p className="walkthrough-note">Prévia em desenvolvimento · Dados ilustrativos.</p>
+              </div>
+              <div className="walkthrough-stage">
+                <div className="walkthrough-phone">
+                  <div className="walkthrough-display">
+                    <Image src={screen.image} alt={screen.alt} width={430} height={932} unoptimized />
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>
