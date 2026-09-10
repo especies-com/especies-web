@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import { useRef, useState } from "react";
-import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 
 const profiles = [
@@ -220,26 +220,59 @@ export function HeroPreview() {
 export default function FeatureShowcase() {
   const [active, setActive] = useState(0);
   const reduced = useReducedMotion();
-  const trackRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start start", "end end"] });
-  useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    setActive(Math.max(0, Math.min(profiles.length - 1, Math.floor(progress * profiles.length))));
-  });
+  const trackRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    const panel = panelRef.current;
+    if (!track || !panel) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
+      const distance = track.offsetHeight - panel.offsetHeight;
+      if (distance <= 0) return;
+      const progress = (top - track.getBoundingClientRect().top) / distance;
+      setActive(Math.max(0, Math.min(profiles.length - 1, Math.floor(progress * profiles.length))));
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    const measure = () => {
+      // Reserve the full panel height without moving the tabs above the viewport.
+      track.style.setProperty("--preview-height", panel.offsetHeight + "px");
+      schedule();
+    };
+    const observer = new ResizeObserver(measure);
+    observer.observe(panel);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
+
   const selectProfile = (index: number) => {
     const track = trackRef.current;
-    if (!track) return;
+    const panel = panelRef.current;
+    if (!track || !panel) return;
+    const top = Number.parseFloat(getComputedStyle(panel).top) || 0;
+    const distance = track.offsetHeight - panel.offsetHeight;
     window.scrollTo({
-      top: window.scrollY + track.getBoundingClientRect().top +
-        (track.offsetHeight - window.innerHeight) * ((index + 0.5) / profiles.length),
+      top: window.scrollY + track.getBoundingClientRect().top - top +
+        distance * ((index + 0.5) / profiles.length),
       behavior: "instant",
     });
     setActive(index);
   };
-  const profile = profiles[active];
   return (
-    <section className="showcase" id="plataforma" ref={trackRef}>
-      <div className="showcase-sticky">
-      <div className="container showcase-viewport">
+    <section className="showcase section" id="plataforma">
+      <div className="container">
         <div className="showcase-heading">
           <p className="eyebrow">CONHEÇA O APLICATIVO</p>
           <h2>
@@ -252,6 +285,8 @@ export default function FeatureShowcase() {
             na especies.
           </p>
         </div>
+        <div className="showcase-track" ref={trackRef}>
+        <div className="showcase-sticky" ref={panelRef}>
         <div
           className="profile-tabs"
           aria-label="Escolha um perfil profissional"
@@ -261,7 +296,7 @@ export default function FeatureShowcase() {
               type="button"
               key={p.label}
               aria-pressed={i === active}
-              aria-controls="profile-preview"
+              aria-controls={`profile-preview-${i}`}
               onClick={() => selectProfile(i)}
             >
               {p.label}
@@ -269,14 +304,18 @@ export default function FeatureShowcase() {
             </button>
           ))}
         </div>
-        <div className="showcase-grid" id="profile-preview">
-          <motion.div key={active} className="feature-copy"
-            initial={reduced ? false : { opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reduced ? 0 : 0.25 }}
-          >
+        <div className="showcase-panels">
+        {profiles.map((profile, index) => (
+        <div
+          key={profile.label}
+          className="showcase-grid"
+          id={`profile-preview-${index}`}
+          aria-hidden={index !== active}
+          inert={index !== active}
+        >
+          <div className="feature-copy" aria-live="polite">
             <span className="feature-index">
-              0{active + 1} / {profile.label.toUpperCase()}
+              0{index + 1} / {profile.label.toUpperCase()}
             </span>
             <h3>{profile.title}</h3>
             <p>{profile.description}</p>
@@ -290,15 +329,14 @@ export default function FeatureShowcase() {
               <br />
               Dados ilustrativos do design.
             </p>
-          </motion.div>
+          </div>
           <div className="demo-stage">
             <motion.div
-              key={active}
               className="app-window"
               data-node-id={profile.node}
               initial={reduced ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: reduced ? 0 : 0.3 }}
+              animate={{ opacity: index === active ? 1 : 0, y: reduced || index === active ? 0 : 14 }}
+              transition={{ duration: 0.3 }}
             >
               <div className="app-topline">
                 <Image
@@ -310,12 +348,15 @@ export default function FeatureShowcase() {
                 <span>PRÉVIA INTERATIVA</span>
               </div>
               <h4>{profile.screen}</h4>
-              <ScreenContent active={active} />
+              <ScreenContent active={index} />
             </motion.div>
             <span className="stage-caption">
               DO REGISTRO À CONTINUIDADE DO CUIDADO
             </span>
           </div>
+        </div>
+        ))}
+        </div>
         </div>
         </div>
       </div>
