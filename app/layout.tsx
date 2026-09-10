@@ -5,7 +5,7 @@ import { AmplitudeProvider } from "./components/AmplitudeProvider";
 export const metadata: Metadata = {
   title: "especies | Gestão de fauna simples. Mais tempo para cuidar.",
   description:
-    "Conheça o aplicativo especies: manejo, veterinária, biologia e gestão conectados ao cuidado com a fauna. Participe da pesquisa e ajude a construir a plataforma.",
+    "A especies é uma plataforma de tecnologia para gestão de instituições de fauna. Conecta informações, processos e operações para simplificar a gestão e dedicar mais tempo ao cuidado com os animais.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

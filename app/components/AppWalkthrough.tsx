@@ -8,21 +8,21 @@ import { useEffect, useRef, useState } from "react";
 const screens = [
   {
     label: "Tela inicial",
-    title: "Um ponto de partida para a rotina.",
-    description: "Uma visão dos animais e das atividades ajuda a equipe a se situar antes do próximo cuidado.",
+    title: "Uma visão integrada da rotina.",
+    description: "Informações sobre animais e atividades reunidas para facilitar o acompanhamento da operação pela equipe.",
     image: "/images/home_screen.svg",
     alt: "Prévia da tela inicial da especies, com animais e atividades",
   },
   {
     label: "Perfil do animal",
-    title: "Cada animal tem uma história.",
-    description: "A identificação e as informações do animal reunidas em um perfil, para dar contexto a quem cuida.",
+    title: "Informações organizadas por animal.",
+    description: "Identificação e informações reunidas em um perfil para simplificar a consulta e apoiar a continuidade do cuidado.",
     image: "/images/animal_profile_screen.svg",
     alt: "Prévia do perfil de um animal na especies",
   },
   {
     label: "Procedimentos",
-    title: "O registro ajuda o cuidado a continuar.",
+    title: "Procedimentos conectados ao cuidado.",
     description: "Os procedimentos do animal em uma mesma tela, para acompanhar os cuidados e consultar o que foi registrado.",
     image: "/images/procedures_profile_screen.svg",
     alt: "Prévia dos procedimentos de um animal na especies",
@@ -74,8 +74,7 @@ export default function AppWalkthrough() {
       <div className="container">
         <div className="walkthrough-heading">
           <p className="eyebrow">UM POUCO DO QUE ESTAMOS CONSTRUINDO</p>
-          <h2 id="walkthrough-title">Da rotina ao registro.<br /><em>Um olhar para o aplicativo.</em></h2>
-          <p>Conheça três telas da especies em desenvolvimento. A pesquisa vai ajudar a orientar os próximos passos.</p>
+          <h2 id="walkthrough-title">Conheça a plataforma.<br /><em>Da visão geral aos registros.</em></h2>
         </div>
         <div className="walkthrough-track" ref={trackRef}>
           <div className="walkthrough-panel" ref={panelRef}>

@@ -43,9 +43,9 @@ export default function Home() {
                 <em>Mais tempo para cuidar.</em>
               </h1>
               <p className="intro">
-                Animais, pessoas e informações no mesmo lugar. Um aplicativo
-                para aproximar o manejo diário, a equipe técnica e a gestão da
-                sua instituição.
+                Uma plataforma de tecnologia para instituições de fauna,
+                reunindo informações, processos e operações em uma experiência
+                simples e intuitiva.
               </p>
               <div className="hero-actions">
                 <a className="button" href={researchUrl}>
@@ -82,23 +82,22 @@ export default function Home() {
         */}
         <section className="container section connection" id="equipe">
           <div>
-            <p className="eyebrow">CADA PROFISSIONAL, UMA PARTE DA HISTÓRIA</p>
+            <p className="eyebrow">DA OPERAÇÃO À TECNOLOGIA</p>
             <h2>
-              O registro de um.
+              Informações conectadas.
               <br />
-              <em>O contexto de todos.</em>
+              <em>Uma operação integrada.</em>
             </h2>
           </div>
           <div>
             <p className="intro">
-              Uma observação no recinto pode ser importante para a equipe
-              veterinária. Um procedimento precisa chegar ao tratador. A gestão
-              precisa enxergar o conjunto.
+              A especies nasceu de uma necessidade real: simplificar a gestão
+              de fauna. Por isso, desenvolvemos nossa tecnologia a partir da
+              operação das instituições.
             </p>
             <p>
-              A especies está sendo construída para aproximar essas rotinas, com
-              informações que acompanham cada animal e ajudam a equipe a dar
-              continuidade ao cuidado.
+              Do manejo diário às decisões da gestão, conectamos os registros
+              e as atividades das equipes para apoiar a continuidade do cuidado.
             </p>
           </div>
           <div className="workflow">
@@ -118,9 +117,9 @@ export default function Home() {
                 começa na <em>sua rotina.</em>
               </h2>
               <p>
-                Queremos ouvir tratadores, veterinários, biólogos, gestores e
-                outros profissionais de instituições de fauna. Conte como sua
-                equipe trabalha e ajude a definir o que vem primeiro.
+                Compartilhe os processos e desafios da sua instituição.
+                Suas respostas ajudarão a definir as próximas prioridades
+                de desenvolvimento da especies.
               </p>
               <a className="button" href={researchUrl}>
                 Participar da pesquisa <span aria-hidden="true">↗</span>
@@ -130,16 +129,13 @@ export default function Home() {
               </p>
             </div>
             <aside>
-              <span className="research-number">01 / ESCUTAR</span>
+              <span className="research-number">QUEM PODE PARTICIPAR</span>
               <h3>
-                Antes de propor,
-                <br />
-                entender.
+                Profissionais de instituições de fauna.
               </h3>
               <p>
-                Sua experiência orienta o desenvolvimento. Você escolhe se quer
-                apenas responder, conversar com a equipe ou indicar interesse em
-                um piloto.
+                Tratadores, veterinários, biólogos, gestores e demais
+                profissionais envolvidos no cuidado e na operação.
               </p>
             </aside>
           </div>
@@ -153,7 +149,7 @@ export default function Home() {
           height={37}
           alt="especies"
         />
-        <p>Tecnologia para aproximar pessoas, dados e o cuidado com a vida.</p>
+        <p>Tecnologia para simplificar a gestão de fauna e dedicar mais tempo ao cuidado.</p>
         <small>© {new Date().getFullYear()} especies</small>
       </footer>
     </>
